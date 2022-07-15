@@ -39,8 +39,6 @@ services:
       MYSQL_PASSWORD: switchbot-logger
       MYSQL_DATABASE: switchbot-logger
       TZ: Asia/Tokyo
-    ports:
-      - 3306:3306
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 20s

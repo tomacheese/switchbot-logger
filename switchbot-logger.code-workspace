@@ -1,0 +1,14 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "logger"
+    },
+    {
+      "path": "viewer"
+    }
+  ],
+  "settings": {}
+}

@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  logger:
+    build: ./logger
+    environment:
+      TZ: Asia/Tokyo
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./config.json
+        target: /app/config.json
+
+  viewer:
+    build: ./viewer
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - 8080:80
+    # depends_on:
+    #   mariadb:
+    #     condition: service_healthy
+    volumes:
+      - type: bind
+        source: ./viewer/view/
+        target: /app/view/
+      - type: bind
+        source: ./config.json
+        target: /app/config.json
+
+  mariadb:
+    image: mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: rootPassword
+      MYSQL_USER: switchbot-logger
+      MYSQL_PASSWORD: switchbot-logger
+      MYSQL_DATABASE: switchbot-logger
+      TZ: Asia/Tokyo
+    ports:
+      - 3306:3306
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - type: bind
+        source: ./db-data/
+        target: /var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_ARBITRARY: 1
+      PMA_HOST: mariadb
+      PMA_USER: root
+      PMA_PASSWORD: rootPassword
+      TZ: Asia/Tokyo
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    ports:
+      - 8081:80
+    volumes:
+      - /sessions

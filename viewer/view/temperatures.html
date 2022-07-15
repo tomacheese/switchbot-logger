@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>switchbot-logger</title>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #target {
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="target"></div>
+  </body>
+  <script>
+    (async () => {
+      const temperatures = await (await fetch('/api/temperatures')).json();
+
+      google.charts.load('current', { packages: ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart);
+      window.onresize = () => { drawChart() }
+      setInterval(() => { drawChart() }, 60000);
+
+      function drawChart() {
+        const data = new google.visualization.DataTable();
+        data.addColumn('date', 'DateTime');
+        data.addColumn('number', 'Temperature');
+        data.addColumn({
+          type: 'number',
+          role: 'annotation'
+        });
+
+        for (let i = 0; i < temperatures.length; i++) {
+          const temperature = temperatures[i];
+
+          data.addRow([
+            new Date(temperature.createdAt),
+            temperature.value,
+            temperature.value,
+          ]);
+        }
+
+        const minDate = new Date()
+        minDate.setHours(-1)
+        const options = {
+          title: 'Temperature',
+          hAxis: {
+            format: 'yyyy/MM/dd\nHH:mm:ss',
+            viewWindow: {
+              min: minDate,
+            }
+          },
+          vAxis: { minValue: 0, gridlined: { count: 10 } },
+          annotations: {
+            alwaysOutside: false,
+            datum: {
+              color: 'black',
+              length: 12,
+            },
+            domain: {
+              color: 'black',
+              length: 5,
+            },
+            highContrast: true,
+            stem: {
+              color: '#fff',
+              length: 10,
+            },
+            style: 'point',
+            textStyle: {
+              fontName: 'Arial',
+              fontSize: 14,
+              bold: false,
+              italic: false,
+              color: '#333',
+              auraColor: '#fff',
+              opacity: .9,
+            }
+          },
+          legend: {
+            pageIndex: 0,
+            position: 'none',
+            alignment: 'start',
+          },
+          series: {
+            0: {
+              annotations: {
+                textStyle: {
+                  bold: true,
+                  color: '#038EC7',
+                },
+              },
+              color: '038EC7',
+
+              curveType: '',
+              lineDashStyle: [2, 2],
+              lineWidth: 3,
+              pointShape: '',
+              pointSize: 12,
+              pointsVisible: true,
+              targetAxisIndex: 0,
+              visibleInLegend: true,
+            },
+          },
+        };
+
+        const chart = new google.visualization.LineChart(document.getElementById('target'));
+        chart.draw(data, options);
+      }
+    })()
+  </script>
+</html>

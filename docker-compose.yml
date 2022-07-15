@@ -19,9 +19,9 @@ services:
       TZ: Asia/Tokyo
     ports:
       - 8080:80
-    # depends_on:
-    #   mariadb:
-    #     condition: service_healthy
+    depends_on:
+      mariadb:
+        condition: service_healthy
     volumes:
       - type: bind
         source: ./viewer/view/

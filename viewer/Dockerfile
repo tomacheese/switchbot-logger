@@ -14,6 +14,7 @@ COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
 COPY src src
+COPY view view
 COPY tsconfig.json .
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]

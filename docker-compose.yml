@@ -24,9 +24,6 @@ services:
         condition: service_healthy
     volumes:
       - type: bind
-        source: ./viewer/view/
-        target: /app/view/
-      - type: bind
         source: ./config.json
         target: /app/config.json
 

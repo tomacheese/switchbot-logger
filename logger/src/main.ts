@@ -51,10 +51,6 @@ async function main() {
     return
   }
 
-  console.log('Initializing database...')
-  await AppDataSource.initialize()
-  console.log('Database initialized')
-
   const config = getConfig()
   const status = await getDeviceStatus(config.deviceId)
   if (status === null) {
@@ -71,21 +67,27 @@ async function main() {
   await dbHumidity.save()
 
   console.log('Database saved')
-
-  await AppDataSource.destroy()
 }
 
 ;(async () => {
-  await main().catch(async (err) => {
-    console.error(err)
-    await axios
-      .post('http://discord-deliver', {
-        embed: {
-          title: `Error`,
-          description: `${err.message}`,
-          color: 0xff0000,
-        },
-      })
-      .catch(() => null)
-  })
+  console.log('Initializing database...')
+  await AppDataSource.initialize()
+  console.log('Database initialized')
+
+  await main()
+    .catch(async (err) => {
+      console.error(err)
+      await axios
+        .post('http://discord-deliver', {
+          embed: {
+            title: `Error`,
+            description: `${err.message}`,
+            color: 0xff0000,
+          },
+        })
+        .catch(() => null)
+    })
+    .finally(async () => {
+      await AppDataSource.destroy()
+    })
 })()

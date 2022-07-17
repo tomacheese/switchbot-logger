@@ -24,7 +24,7 @@ async function getDevices(): Promise<SwitchBotDevice[]> {
   return response.data.body.deviceList
 }
 
-async function getDeviceStatus(deviceId: string): Promise<DeviceStatus> {
+async function getDeviceStatus(deviceId: string): Promise<DeviceStatus | null> {
   const config = getConfig()
   const response = await axios.get<GetDevicesStatusResult>(
     BASE_URL + '/v1.0/devices/' + deviceId + '/status',
@@ -32,8 +32,13 @@ async function getDeviceStatus(deviceId: string): Promise<DeviceStatus> {
       headers: {
         Authorization: config.token,
       },
+      validateStatus: () => true,
     }
   )
+  if (response.status !== 200) {
+    console.log('getDeviceStatus Error: ' + response.status)
+    return null
+  }
   return response.data.body
 }
 
@@ -52,6 +57,10 @@ async function main() {
 
   const config = getConfig()
   const status = await getDeviceStatus(config.deviceId)
+  if (status === null) {
+    console.log('Device not found?')
+    return
+  }
 
   const dbTemperature = new DBTemperature()
   dbTemperature.value = status.temperature

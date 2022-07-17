@@ -27,15 +27,15 @@
   </body>
   <script>
     (async () => {
-      const temperatures = await (await fetch('/api/temperatures')).json();
-      const humidities = await (await fetch('/api/humidities')).json();
-
       google.charts.load('current', { packages: ['corechart'] });
       google.charts.setOnLoadCallback(drawChart);
       window.onresize = () => { drawChart() }
       setInterval(() => { drawChart() }, 60000);
 
       function drawChart() {
+        const temperatures = await(await fetch('/api/temperatures')).json();
+        const humidities = await(await fetch('/api/humidities')).json();
+
         const data = new google.visualization.DataTable();
         data.addColumn('date', 'DateTime');
         data.addColumn('number', 'Temperature');

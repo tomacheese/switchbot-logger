@@ -1,5 +1,6 @@
 db-data/*
 !db-data/.gitkeep
 node_modules/
+dist/
 
 config.json

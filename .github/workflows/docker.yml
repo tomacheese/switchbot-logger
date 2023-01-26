@@ -35,8 +35,8 @@ env:
   # ビルド対象情報の情報
   TARGETS: >-
     [
-      { imageName: "tomacheese/my-pixiv", context: ".", file: "view.Dockerfile", packageName: "my-pixiv" },
-      { imageName: "tomacheese/my-pixiv-api", context: ".", file: "api.Dockerfile", packageName: "my-pixiv-api" }
+      { imageName: "tomacheese/switchbot-logger-logger", context: "logger", file: "logger/Dockerfile", packageName: "switchbot-logger-logger" },
+      { imageName: "tomacheese/switchbot-logger-viewer", context: "viewer", file: "viewer/Dockerfile", packageName: "switchbot-logger-viewer" }
     ]
 
 concurrency:

@@ -14,12 +14,30 @@ async function main() {
   app.use(expressJson())
   app.use(express.static('view'))
 
-  app.get('/api/temperatures', async (_req, res) => {
-    const temperatures = await DBTemperature.find()
+  app.get('/api/temperatures', async (req, res) => {
+    const limit =
+      req.query.limit && typeof req.query.limit === 'string'
+        ? parseInt(req.query.limit)
+        : 100
+    const temperatures = await DBTemperature.find({
+      order: {
+        rowId: 'DESC',
+      },
+      take: limit,
+    })
     res.json(temperatures)
   })
-  app.get('/api/humidities', async (_req, res) => {
-    const humidities = await DBHumidity.find()
+  app.get('/api/humidities', async (req, res) => {
+    const limit =
+      req.query.limit && typeof req.query.limit === 'string'
+        ? parseInt(req.query.limit)
+        : 100
+    const humidities = await DBHumidity.find({
+      order: {
+        rowId: 'DESC',
+      },
+      take: limit,
+    })
     res.json(humidities)
   })
   app.listen(80, '0.0.0.0', () => {

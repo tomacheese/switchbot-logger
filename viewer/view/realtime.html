@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>switchbot-logger realtime</title>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li>室温: <span id="temperature"></span>℃</li>
+      <li>湿度: <span id="humidity"></span>%</li>
+    </ul>
+    <div id="datetime"></div>
+  </body>
+  <script>
+    (async () => {
+      async function draw() {
+        const temperatures = await fetch('/api/temperatures?limit=1').then(s => s.json())
+        const humidities = await fetch('/api/humidities?limit=1').then(s => s.json());
+
+        const temperature = temperatures[temperatures.length - 1];
+        const humidity = humidities[humidities.length - 1];
+
+        document.getElementById('temperature').innerText = temperature.value;
+        document.getElementById('humidity').innerText = humidity.value;
+
+        const datetime = new Date(temperature.createdAt);
+        document.getElementById('datetime').innerText = datetime.toLocaleString();
+      }
+
+      setInterval(draw, 60000);
+      draw();
+    })()
+  </script>
+</html>

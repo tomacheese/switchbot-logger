@@ -29,12 +29,14 @@
     (async () => {
       google.charts.load('current', { packages: ['corechart'] });
       google.charts.setOnLoadCallback(drawChart);
-      window.onresize = () => { drawChart() }
-      setInterval(() => { drawChart() }, 60000);
+      window.onresize = async () => { await drawChart() }
+      setInterval(async () => { await drawChart() }, 60000);
 
-      function drawChart() {
-        const temperatures = await(await fetch('/api/temperatures')).json();
-        const humidities = await(await fetch('/api/humidities')).json();
+      async function drawChart() {
+        const temperatures = await fetch('/api/temperatures').then(s => s.json())
+        const humidities = await fetch('/api/humidities').then(s => s.json());
+        console.log("temperatures", temperatures);
+        console.log("humidities", humidities);
 
         const data = new google.visualization.DataTable();
         data.addColumn('date', 'DateTime');
@@ -49,7 +51,7 @@
           role: 'annotation'
         });
 
-        for (let i = 0; i < temperatures.length; i++) {
+        for (let i = 0; i < temperatures.length && i < 50; i++) {
           const temperature = temperatures[i];
           const humidity = humidities[i];
 
@@ -61,19 +63,13 @@
             humidity.value
           ]);
         }
-
-        const minDate = new Date()
-        minDate.setHours(-1)
         const options = {
-          title: 'Humidity',
+          title: 'Both',
           hAxis: {
             format: 'yyyy/MM/dd\nHH:mm:ss',
-            viewWindow: {
-              min: minDate,
-            }
           },
           vAxis: { minValue: 0, gridlined: { count: 10 } },
-          chartArea: { left: 100, right: 200, top: 40, bottom: 100 },
+          chartArea: { left: 50, right: 90, top: 40, bottom: 50 },
           annotations: {
             alwaysOutside: false,
             datum: {
@@ -111,6 +107,7 @@
               color: '038EC7',
 
               curveType: '',
+              labelInLegend: '温度',
               lineDashStyle: [2, 2],
               lineWidth: 3,
               pointShape: '',
@@ -129,6 +126,7 @@
               color: '50B432',
 
               curveType: '',
+              labelInLegend: '湿度',
               lineDashStyle: [2, 2],
               lineWidth: 3,
               pointShape: '',

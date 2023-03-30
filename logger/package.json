@@ -39,7 +39,7 @@
     "ts-node-dev": "2.0.0",
     "typeorm": "0.3.12",
     "typeorm-naming-strategies": "4.1.0",
-    "typescript": "5.0.2",
+    "typescript": "5.0.3",
     "yargs": "17.7.1",
     "yarn-run-all": "3.1.1"
   }

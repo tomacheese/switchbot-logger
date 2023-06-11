@@ -37,9 +37,19 @@ services:
       MYSQL_DATABASE: switchbot-logger
       TZ: Asia/Tokyo
     healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      test:
+        [
+          "CMD",
+          "mariadb-admin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uroot",
+          "-prootPassword",
+        ]
       timeout: 20s
-      retries: 10
+      interval: 5s
+      retries: 30
     volumes:
       - type: bind
         source: ./db-data/

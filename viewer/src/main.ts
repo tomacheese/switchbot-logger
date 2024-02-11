@@ -14,10 +14,10 @@ async function main() {
   app.use(expressJson())
   app.use(express.static('view'))
 
-  app.get('/api/temperatures', async (req, res) => {
+  app.get('/api/temperatures', async (request, response) => {
     const limit =
-      req.query.limit && typeof req.query.limit === 'string'
-        ? parseInt(req.query.limit)
+      request.query.limit && typeof request.query.limit === 'string'
+        ? Number.parseInt(request.query.limit)
         : 100
     const temperatures = await DBTemperature.find({
       order: {
@@ -25,12 +25,12 @@ async function main() {
       },
       take: limit,
     })
-    res.json(temperatures)
+    response.json(temperatures)
   })
-  app.get('/api/humidities', async (req, res) => {
+  app.get('/api/humidities', async (request, response) => {
     const limit =
-      req.query.limit && typeof req.query.limit === 'string'
-        ? parseInt(req.query.limit)
+      request.query.limit && typeof request.query.limit === 'string'
+        ? Number.parseInt(request.query.limit)
         : 100
     const humidities = await DBHumidity.find({
       order: {
@@ -38,7 +38,7 @@ async function main() {
       },
       take: limit,
     })
-    res.json(humidities)
+    response.json(humidities)
   })
   app.listen(80, '0.0.0.0', () => {
     console.log(`Server started.`)
@@ -46,7 +46,7 @@ async function main() {
 }
 
 ;(async () => {
-  await main().catch(async (err) => {
-    console.error(err)
+  await main().catch(async (error) => {
+    console.error(error)
   })
 })()

@@ -4,7 +4,7 @@ import { getConfig } from './configuration'
 import { DBHumidity } from './entities/humidity.entity'
 import { DBTemperature } from './entities/temperature.entity'
 import { GetDevicesResult, SwitchBotDevice } from './model/devices'
-import { DeviceStatus, GetDevicesStatusResult } from './model/deviceStatus'
+import { DeviceStatus, GetDevicesStatusResult } from './model/device-status'
 import { AppDataSource } from './mysql'
 
 const BASE_URL = 'https://api.switch-bot.com'
@@ -58,13 +58,13 @@ async function main() {
     return
   }
 
-  const dbTemperature = new DBTemperature()
-  dbTemperature.value = status.temperature
-  await dbTemperature.save()
+  const databaseTemperature = new DBTemperature()
+  databaseTemperature.value = status.temperature
+  await databaseTemperature.save()
 
-  const dbHumidity = new DBHumidity()
-  dbHumidity.value = status.humidity
-  await dbHumidity.save()
+  const databaseHumidity = new DBHumidity()
+  databaseHumidity.value = status.humidity
+  await databaseHumidity.save()
 
   console.log('Database saved')
 }
@@ -75,14 +75,14 @@ async function main() {
   console.log('Database initialized')
 
   await main()
-    .catch(async (err) => {
-      console.error(err)
+    .catch(async (error) => {
+      console.error(error)
       await axios
         .post('http://discord-deliver', {
           embed: {
             title: `Error`,
-            description: `${err.message}`,
-            color: 0xff0000,
+            description: `${error.message}`,
+            color: 0xff_00_00,
           },
         })
         .catch(() => null)

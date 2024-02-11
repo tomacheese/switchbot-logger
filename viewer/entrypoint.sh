@@ -2,5 +2,5 @@
 
 while :
 do
-  yarn build || true
+  pnpm start || true
 done

@@ -47,5 +47,5 @@
     "typeorm-naming-strategies": "4.1.0",
     "typescript": "5.4.3"
   },
-  "packageManager": "pnpm@8.15.5"
+  "packageManager": "pnpm@8.15.6"
 }

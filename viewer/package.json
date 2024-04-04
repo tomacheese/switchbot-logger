@@ -45,7 +45,7 @@
     "tsx": "4.7.2",
     "typeorm": "0.3.20",
     "typeorm-naming-strategies": "4.1.0",
-    "typescript": "5.4.3"
+    "typescript": "5.4.4"
   },
   "packageManager": "pnpm@8.15.6"
 }

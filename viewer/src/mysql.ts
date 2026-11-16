@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   username: config.db.username,
   password: config.db.password,
   database: config.db.database,
-  synchronize: true,
+  synchronize: false,
   logging: process.env.NODE_ENV === 'development',
   namingStrategy: new SnakeNamingStrategy(),
   entities: [DBTemperature, DBHumidity],

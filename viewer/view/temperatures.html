@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>switchbot-logger</title>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/common.js"></script>
     <style>
       html,
       body {
@@ -24,7 +25,8 @@
   </body>
   <script>
     (async () => {
-      const temperatures = await (await fetch('/api/temperatures')).json();
+      const deviceId = await setupDevicePicker();
+      const temperatures = await (await fetch(apiUrl('/api/temperatures', deviceId))).json();
 
       google.charts.load('current', { packages: ['corechart'] });
       google.charts.setOnLoadCallback(drawChart);

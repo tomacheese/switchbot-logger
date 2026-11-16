@@ -17,6 +17,7 @@
   "scripts": {
     "start": "tsx ./src/main.ts",
     "dev": "tsx watch ./src/main.ts",
+    "test": "node --import tsx --test src/*.test.ts",
     "lint": "run-z lint:prettier,lint:eslint,lint:tsc",
     "fix": "run-z fix:prettier,fix:eslint",
     "lint:prettier": "prettier --check src",

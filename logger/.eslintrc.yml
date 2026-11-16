@@ -21,3 +21,7 @@ rules:
     - { ignoreIIFE: true }
   'unicorn/prefer-top-level-await': off
   'unicorn/no-null': off
+overrides:
+  - files: ['*.test.ts']
+    rules:
+      '@typescript-eslint/no-floating-promises': off

@@ -1,8 +1,6 @@
 import fs from 'node:fs'
 
 interface Config {
-  token: string
-  deviceId: string
   db: {
     host: string
     port: number

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>switchbot-logger</title>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/common.js"></script>
     <style>
       html,
       body {
@@ -27,14 +28,15 @@
   </body>
   <script>
     (async () => {
+      const deviceId = await setupDevicePicker();
       google.charts.load('current', { packages: ['corechart'] });
       google.charts.setOnLoadCallback(drawChart);
       window.onresize = async () => { await drawChart() }
       setInterval(async () => { await drawChart() }, 60000);
 
       async function drawChart() {
-        const temperatures = await fetch('/api/temperatures').then(s => s.json())
-        const humidities = await fetch('/api/humidities').then(s => s.json());
+        const temperatures = await fetch(apiUrl('/api/temperatures', deviceId)).then(s => s.json())
+        const humidities = await fetch(apiUrl('/api/humidities', deviceId)).then(s => s.json());
         console.log("temperatures", temperatures);
         console.log("humidities", humidities);
 
@@ -54,6 +56,7 @@
         for (let i = 0; i < temperatures.length && i < 50; i++) {
           const temperature = temperatures[i];
           const humidity = humidities[i];
+          if (humidity === undefined) break;
 
           data.addRow([
             new Date(temperature.createdAt),

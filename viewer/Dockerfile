@@ -14,7 +14,7 @@ RUN apk update && \
 
 WORKDIR /app
 
-COPY pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm fetch
 

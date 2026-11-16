@@ -36,6 +36,7 @@ jobs:
           { imageName: "tomacheese/switchbot-logger-logger", context: "logger", file: "logger/Dockerfile", packageName: "switchbot-logger-logger" },
           { imageName: "tomacheese/switchbot-logger-viewer", context: "viewer", file: "viewer/Dockerfile", packageName: "switchbot-logger-viewer" }
         ]
+      allow-unsafe-pr-checkout: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository }}
     secrets:
       DOCKER_USERNAME: ${{ github.actor }}
       DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}

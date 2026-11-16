@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>switchbot-logger realtime</title>
     <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/common.js"></script>
     <style>
       html,
       body {
@@ -25,9 +26,11 @@
   </body>
   <script>
     (async () => {
+      const deviceId = await setupDevicePicker();
+
       async function draw() {
-        const temperatures = await fetch('/api/temperatures?limit=1').then(s => s.json())
-        const humidities = await fetch('/api/humidities?limit=1').then(s => s.json());
+        const temperatures = await fetch(apiUrl('/api/temperatures', deviceId, { limit: 1 })).then(s => s.json())
+        const humidities = await fetch(apiUrl('/api/humidities', deviceId, { limit: 1 })).then(s => s.json());
 
         const temperature = temperatures[temperatures.length - 1];
         const humidity = humidities[humidities.length - 1];

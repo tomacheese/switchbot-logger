@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>switchbot-logger</title>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/common.js"></script>
   </head>
   <body>
     <h1>switchbot-logger</h1>
@@ -13,6 +13,25 @@
       <li><a href="/both.html">both</a></li>
       <li><a href="/temperatures.html">Temperatures</a></li>
       <li><a href="/humidities.html">Humidities</a></li>
+      <li><a href="/realtime.html">Realtime</a></li>
     </ul>
+    <h2>Devices</h2>
+    <ul id="devices"></ul>
   </body>
+  <script>
+    (async () => {
+      const list = document.getElementById('devices')
+      for (const device of await fetchDevices()) {
+        const item = document.createElement('li')
+        item.append(device.deviceName ?? device.deviceId, ': ')
+        for (const page of ['both', 'temperatures', 'humidities', 'realtime']) {
+          const link = document.createElement('a')
+          link.href = apiUrl(`/${page}.html`, device.deviceId)
+          link.textContent = page
+          item.append(link, ' ')
+        }
+        list.append(item)
+      }
+    })()
+  </script>
 </html>

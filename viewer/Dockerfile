@@ -27,6 +27,6 @@ RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh
 
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]

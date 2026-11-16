@@ -31,6 +31,7 @@ jobs:
     name: Docker CI
     uses: book000/templates/.github/workflows/reusable-docker.yml@master
     with:
+      allow-unsafe-pr-checkout: ${{ contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.pull_request.author_association) }}
       targets: >-
         [
           { imageName: "tomacheese/switchbot-logger-logger", context: "logger", file: "logger/Dockerfile", packageName: "switchbot-logger-logger" },

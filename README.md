@@ -12,6 +12,14 @@ SwitchBot の温湿度計の温度・湿度を MariaDB に蓄積し、viewer で
 
 `logger` と `viewer` は、同じ `config.json` をマウントして読みます。
 
+## データベースの認証情報
+
+リポジトリ直下の `.env` に `MARIADB_ROOT_PASSWORD` と `MYSQL_PASSWORD` を設定してください。どちらも空でない、推測されにくい別々のパスワードを指定します。`.env` は Git の追跡対象外です。`config.json` の `db.password` には `MYSQL_PASSWORD` と同じ値を指定してください。
+
+これらの環境変数は新規データベースの初期化時に適用されます。既存の `db-data` を使用する場合、環境変数を変更しても保存済みのパスワードは変更されません。既存の認証情報で接続し、MariaDB 側で root とアプリ用ユーザーのパスワードを変更してから、`.env` と `config.json` を合わせて更新してください。既存データを削除する必要はありません。
+
+phpMyAdmin は提供していません。データベースの管理には `docker compose exec mariadb mariadb -u root -p` を使用してください。
+
 ## config.json
 
 `config.json` はリポジトリ直下に置き、`docker-compose.yml` で `logger` と `viewer` にマウントされます。**アカウントやデバイスの追加は、このファイルを編集するだけで完結します。コードの変更、イメージの再ビルド、コンテナの再作成は不要です。**
